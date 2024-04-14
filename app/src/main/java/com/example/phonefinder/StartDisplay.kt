@@ -20,6 +20,7 @@ class StartDisplay : AppCompatActivity() {
     private val receiver = SMSReceiver()
     private var isReceiverRegistered = false
     private val REQUEST_PERMISSIONS_CODE = 1001
+    private val SEND_SMS_REQUEST_CODE = 123
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -31,7 +32,7 @@ class StartDisplay : AppCompatActivity() {
         // Hide the navigation bar
         hideNavigationBar()
 
-        // Request both SMS and location permissions if not granted
+        // Request RECEIVE_SMS, ACCESS_FINE_LOCATION, and SEND_SMS permissions if not granted
         if (ContextCompat.checkSelfPermission(
                 this,
                 Manifest.permission.RECEIVE_SMS
@@ -42,11 +43,11 @@ class StartDisplay : AppCompatActivity() {
             ) != PackageManager.PERMISSION_GRANTED ||
             ActivityCompat.checkSelfPermission(
                 this,
-                Manifest.permission.
-            )
+                Manifest.permission.ACCESS_COARSE_LOCATION
+            ) != PackageManager.PERMISSION_GRANTED ||
             ActivityCompat.checkSelfPermission(
                 this,
-                Manifest.permission.ACCESS_COARSE_LOCATION
+                Manifest.permission.SEND_SMS
             ) != PackageManager.PERMISSION_GRANTED
         ) {
             requestPermissions()
@@ -71,7 +72,8 @@ class StartDisplay : AppCompatActivity() {
             arrayOf(
                 Manifest.permission.RECEIVE_SMS,
                 Manifest.permission.ACCESS_FINE_LOCATION,
-                Manifest.permission.ACCESS_COARSE_LOCATION
+                Manifest.permission.ACCESS_COARSE_LOCATION,
+                Manifest.permission.SEND_SMS
             ),
             REQUEST_PERMISSIONS_CODE
         )
@@ -120,11 +122,4 @@ class StartDisplay : AppCompatActivity() {
         fragmentTransaction.replace(R.id.frameLayout,fragment)
         fragmentTransaction.commit()
     }
-    /*override fun onDestroy() {
-        super.onDestroy()
-        if (isReceiverRegistered) {
-            unregisterReceiver(receiver)
-            isReceiverRegistered = false
-        }
-    }*/
 }
