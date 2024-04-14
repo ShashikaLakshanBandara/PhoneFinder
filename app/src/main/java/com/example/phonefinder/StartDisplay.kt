@@ -42,6 +42,10 @@ class StartDisplay : AppCompatActivity() {
             ) != PackageManager.PERMISSION_GRANTED ||
             ActivityCompat.checkSelfPermission(
                 this,
+                Manifest.permission.
+            )
+            ActivityCompat.checkSelfPermission(
+                this,
                 Manifest.permission.ACCESS_COARSE_LOCATION
             ) != PackageManager.PERMISSION_GRANTED
         ) {
