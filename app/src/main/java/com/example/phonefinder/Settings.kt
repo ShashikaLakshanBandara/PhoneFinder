@@ -84,36 +84,29 @@ class Settings : AppCompatActivity() {
 
         mInterstitialAd?.fullScreenContentCallback = object: FullScreenContentCallback() {
             override fun onAdClicked() {
-                // Called when a click is recorded for an ad.
                 Log.d(TAG, "Ad was clicked.")
             }
 
             override fun onAdDismissedFullScreenContent() {
-                // Called when ad is dismissed.
                 Log.d(TAG, "Ad dismissed fullscreen content.")
                 mInterstitialAd = null
             }
 
             override fun onAdFailedToShowFullScreenContent(p0: AdError) {
-                // Called when ad fails to show.
                 Log.e(TAG, "Ad failed to show fullscreen content.")
                 mInterstitialAd = null
             }
 
             override fun onAdImpression() {
-                // Called when an impression is recorded for an ad.
                 Log.d(TAG, "Ad recorded an impression.")
             }
 
             override fun onAdShowedFullScreenContent() {
-                // Called when ad is shown.
                 Log.d(TAG, "Ad showed fullscreen content.")
             }
         }
 
-        // Use lifecycleScope to launch a coroutine
         lifecycleScope.launch {
-            // Perform database operations in a background thread
             val settings = withContext(Dispatchers.IO) {
                 db.SettingsDAO().getSettingsById(1)
             }
@@ -142,7 +135,6 @@ class Settings : AppCompatActivity() {
         }
 
 
-        //back button
         val back = findViewById<Toolbar>(R.id.toolbar)
         back.setOnClickListener {
 

@@ -29,10 +29,8 @@ class StartDisplay : AppCompatActivity() {
         setContentView(binding.root)
         replaceFragment(Home())
 
-        // Hide the navigation bar
         hideNavigationBar()
 
-        // Request RECEIVE_SMS, ACCESS_FINE_LOCATION, and SEND_SMS permissions if not granted
         if (ContextCompat.checkSelfPermission(
                 this,
                 Manifest.permission.RECEIVE_SMS

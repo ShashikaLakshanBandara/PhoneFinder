@@ -53,7 +53,7 @@ class Home : Fragment() {
         val adRequest2 = AdRequest.Builder().build()
         mAdView2.loadAd(adRequest2)
 
-        return view // Return the inflated view
+        return view
     }
 
     companion object {

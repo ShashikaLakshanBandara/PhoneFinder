@@ -89,7 +89,7 @@ class Find : Fragment() {
     private fun showEmptyCardDialog() {
         val dialogView = LayoutInflater.from(requireContext()).inflate(R.layout.empty_card_layout, null)
 
-        dialog = AlertDialog.Builder(requireContext()) // Use requireContext() here
+        dialog = AlertDialog.Builder(requireContext())
             .setView(dialogView)
             .setCancelable(true)
             .create()
@@ -98,7 +98,7 @@ class Find : Fragment() {
     }
     private val smsReceiver = object : BroadcastReceiver() {
         override fun onReceive(context: Context?, intent: Intent?) {
-            // Extract the variables from the broadcast
+
             BS = intent?.getStringExtra("BS")
             WS = intent?.getStringExtra("WS")
             GS = intent?.getStringExtra("GS")
@@ -110,7 +110,7 @@ class Find : Fragment() {
             phoneNumber = intent?.getStringExtra("phoneNumber")
 
 
-            // Now you have the variables, do whatever you need to do with them
+
             verifiedResponse()
         }
     }
@@ -127,7 +127,7 @@ class Find : Fragment() {
     }
 
     fun verifiedResponse() {
-        // Implement your logic here for handling the verified response
+
         Log.d("shashika", "In the verifiedResponse function")
         dialog.dismiss()
 
@@ -145,7 +145,7 @@ class Find : Fragment() {
 
 
         val intent = Intent(activity, Results::class.java)
-        // Pass the variables to the RemoteMode activity
+
         intent?.putExtra("BS", BS)
         intent?.putExtra("WS", WS)
         intent?.putExtra("GS", GS)
@@ -178,13 +178,13 @@ class Find : Fragment() {
         val adRequest2 = AdRequest.Builder().build()
         mAdView2.loadAd(adRequest2)
 
-        return view // Return the inflated view
+        return view
     }
 
     private fun sendMessage(phoneNumber: String, message: String) {
 
 
-        // Check if the app has permission to send SMS
+
         if (ContextCompat.checkSelfPermission(
                 requireContext(),
                 Manifest.permission.SEND_SMS
@@ -196,7 +196,7 @@ class Find : Fragment() {
                 PERMISSION_SEND_SMS
             )
         } else {
-            // Permission already granted, send SMS
+
             try {
                 val smsManager: SmsManager = SmsManager.getDefault()
                 smsManager.sendTextMessage(phoneNumber, null, message, null, null)

@@ -2,19 +2,18 @@ package com.example.phonefinder
 
 import android.content.Intent
 import android.content.IntentFilter
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.provider.Telephony
 import android.util.Log
 import android.widget.Button
 import android.widget.TextView
 import android.widget.Toolbar
+import androidx.appcompat.app.AppCompatActivity
 
 class Results : AppCompatActivity() {
 
     private lateinit var smsReceiver: SMSReceiver
 
-    // Retrieve the variables sent from FindActivity
     var BS: String? = null
     var WS: String? = null
     var GS: String? = null
@@ -35,7 +34,6 @@ class Results : AppCompatActivity() {
 
         smsReceiver = SMSReceiver()
 
-        // Register SMSReceiver to receive SMS_RECEIVED_ACTION broadcasts
         val intentFilter = IntentFilter(Telephony.Sms.Intents.SMS_RECEIVED_ACTION)
         registerReceiver(smsReceiver, intentFilter)
 
@@ -92,7 +90,6 @@ class Results : AppCompatActivity() {
         btnRemoteMode.setOnClickListener {
             val intent = Intent(this,RemoteMode::class.java)
 
-            // Pass the variables to the RemoteMode activity
             intent?.putExtra("BS", BS)
             intent?.putExtra("WS", WS)
             intent?.putExtra("GS", GS)

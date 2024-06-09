@@ -1,11 +1,9 @@
 package com.example.phonefinder
 
-import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
 import android.content.res.ColorStateList
 import android.net.Uri
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.provider.Telephony
 import android.telephony.SmsManager
@@ -16,13 +14,14 @@ import android.widget.EditText
 import android.widget.Switch
 import android.widget.TextView
 import android.widget.Toolbar
+import androidx.appcompat.app.AppCompatActivity
 
 class RemoteMode : AppCompatActivity() {
 
     private lateinit var smsReceiver: SMSReceiver
 
 
-    // Declare variables without initialization
+
     private var BS: String? = null
     private var WS: String? = null
     private var GS: String? = null
@@ -43,11 +42,11 @@ class RemoteMode : AppCompatActivity() {
 
         smsReceiver = SMSReceiver()
 
-        // Register SMSReceiver to receive SMS_RECEIVED_ACTION broadcasts
+
         val intentFilter = IntentFilter(Telephony.Sms.Intents.SMS_RECEIVED_ACTION)
         registerReceiver(smsReceiver, intentFilter)
 
-        // Retrieve the intent extras within onCreate
+
         BS = intent.getStringExtra("BS")
         WS = intent.getStringExtra("WS")
         GS = intent.getStringExtra("GS")
@@ -77,7 +76,7 @@ class RemoteMode : AppCompatActivity() {
 
 
 
-        // Initialize Switch variables with their respective views
+
         switchFL = findViewById(R.id.switchFlash)
         switchMS = findViewById(R.id.switchSound)
         switchPS = findViewById(R.id.switchPlaySound)
@@ -121,25 +120,25 @@ class RemoteMode : AppCompatActivity() {
         }
         switchMS.setOnCheckedChangeListener { _, isChecked ->
             if (isChecked) {
-                // Change thumb color when checked
+
                 switchMS.thumbTintList = ColorStateList.valueOf(resources.getColor(R.color.switchOn))
             } else {
-                // Change thumb color when unchecked
+
                 switchMS.thumbTintList = ColorStateList.valueOf(resources.getColor(R.color.switchOff))
             }
         }
         switchFL.setOnCheckedChangeListener { _, isChecked ->
             if (isChecked) {
-                // Change thumb color when checked
+
                 switchFL.thumbTintList = ColorStateList.valueOf(resources.getColor(R.color.switchOn))
             } else {
-                // Change thumb color when unchecked
+
                 switchFL.thumbTintList = ColorStateList.valueOf(resources.getColor(R.color.switchOff))
             }
         }
         switchPS.setOnCheckedChangeListener { _, isChecked ->
             if (isChecked) {
-                // Change thumb color when checked
+
                 switchPS.thumbTintList = ColorStateList.valueOf(resources.getColor(R.color.switchOn))
                 var msg = "CommandFromPhoneFinder" +
                         "\nCommand:FROM_REOMTEMODEPLAYSOUND" +
@@ -148,7 +147,6 @@ class RemoteMode : AppCompatActivity() {
 
 
             } else {
-                // Change thumb color when unchecked
                 switchPS.thumbTintList = ColorStateList.valueOf(resources.getColor(R.color.switchOff))
                 var msg = "CommandFromPhoneFinder" +
                         "\nCommand:FROM_REOMTEMODEPLAYSOUND" +
@@ -189,11 +187,9 @@ class RemoteMode : AppCompatActivity() {
         val mapIntent = Intent(Intent.ACTION_VIEW, uri)
         mapIntent.setPackage("com.google.android.apps.maps")
 
-        // Check if the Google Maps app is installed
         if (mapIntent.resolveActivity(packageManager) != null) {
             startActivity(mapIntent)
         } else {
-            // Google Maps app is not installed, open in web browser
             val webIntent = Intent(Intent.ACTION_VIEW, Uri.parse("https://www.google.com/maps/search/?api=1&query=$latitude,$longitude"))
             startActivity(webIntent)
         }

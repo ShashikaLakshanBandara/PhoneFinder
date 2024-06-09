@@ -35,13 +35,11 @@ class SMSReceiver : BroadcastReceiver() {
     private lateinit var db: SettingsDatabase
     private var smsNumber: String? = null
 
-    // Declare mediaPlayer as a class-level variable
     private var mediaPlayer: MediaPlayer? = null
 
     private var locationManager: LocationManager? = null
     private var currentLocation: Location? = null
 
-    // Define a flag to track playback status
     private var isPlaying: Boolean = false
 
 
@@ -58,16 +56,13 @@ class SMSReceiver : BroadcastReceiver() {
         ).build()
 
         CoroutineScope(Dispatchers.IO).launch {
-            // Perform database operations in the
             val settings = db.SettingsDAO().getSettingsById(1)
             val securityCodeDatabase = settings.securityCode
 
-            // Switch to the main thread before displaying Toast messages
             withContext(Dispatchers.Main) {
 
                 Log.d("shashika", "Commad is - $command")
                 Log.d("shashika", "Security Code is - $securityCodeReceived")
-                //Log.d("shashika", "$securityCodeReceived = $securityCodeDatabase")
 
                 Log.d("shashika", "CommandFromPhoneFinder == $commandFrom && CHECK_VERIFICATION == $command && $securityCodeReceived == $securityCodeDatabase")
                 Log.d("shashika", "CommandFromPhoneFinder == $commandFrom && RESPONSE_MESSAGE == $command")
@@ -108,7 +103,7 @@ class SMSReceiver : BroadcastReceiver() {
                 else if(commandFrom == "CommandFromPhoneFinder" && command == "RESPONSE_MESSAGE"){
                     Log.d("shashika", "In the RESPONSE_MESSAGE")
 
-                    // Extract the variables you want to send
+
 
                     val BS = smsBody.substringAfter("BS:\"").substringBefore("\"")
                     val WS = smsBody.substringAfter("WS:\"").substringBefore("\"")
@@ -122,7 +117,6 @@ class SMSReceiver : BroadcastReceiver() {
 
 
 
-                    // Send a broadcast indicating that the verification is successful
                     val verifiedIntent = Intent("com.example.phonefinder.VERIFIED_RESPONSE")
 
                     Log.d("shashika","Values in SMSReceiver ")
@@ -190,15 +184,12 @@ class SMSReceiver : BroadcastReceiver() {
         Log.d("shashika", "in getCurrentLocation")
 
 
-        // Create location manager
         locationManager = context.getSystemService(Context.LOCATION_SERVICE) as LocationManager
 
         Log.d("shashika", "in locationManager")
 
-        // Define location listener
         val locationListener = object : LocationListener {
             override fun onLocationChanged(location: Location) {
-                // Location update received
                 currentLocation = location
                 if (currentLocation != null) {
                     Log.d("shashika", "In the location if")
@@ -218,7 +209,6 @@ class SMSReceiver : BroadcastReceiver() {
                     Toast.makeText(context, "Failed to retrieve current location", Toast.LENGTH_SHORT).show()
                 }
 
-                // Remember to remove the location updates if you no longer need them
                 locationManager?.removeUpdates(this)
             }
 
@@ -232,7 +222,6 @@ class SMSReceiver : BroadcastReceiver() {
 
         }
 
-        // Request location updates
         if (ActivityCompat.checkSelfPermission(
                 context,
                 Manifest.permission.ACCESS_FINE_LOCATION
@@ -241,57 +230,19 @@ class SMSReceiver : BroadcastReceiver() {
                 Manifest.permission.ACCESS_COARSE_LOCATION
             ) != PackageManager.PERMISSION_GRANTED
         ) {
-            // Request the missing permissions if needed.
-            // See the documentation for ActivityCompat.requestPermissions for more details.
             return
         }
         locationManager?.requestSingleUpdate(LocationManager.GPS_PROVIDER, locationListener, null)
 
     }
-    // Function to play the default ringing tone continuously
-    /*private fun playRingingTone(context: Context) {
-        //Toast.makeText(context, "sound = $sound", Toast.LENGTH_SHORT).show()
-        // Check if the mediaPlayer is already playing
-        if (mediaPlayer?.isPlaying == true) {
-            // If already playing, stop it first before starting again
-            Toast.makeText(context, " If already playing, stop it first before starting again", Toast.LENGTH_SHORT).show()
-            mediaPlayer?.stop()
-            mediaPlayer?.reset()
-        } else {
-            val ringtoneUri: Uri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_RINGTONE)
 
-            // Create a new instance of MediaPlayer
-            mediaPlayer = MediaPlayer()
-
-            // Set audio attributes for the MediaPlayer
-            mediaPlayer?.setAudioAttributes(
-                AudioAttributes.Builder()
-                    .setUsage(AudioAttributes.USAGE_NOTIFICATION_RINGTONE)
-                    .setContentType(AudioAttributes.CONTENT_TYPE_SONIFICATION)
-                    .build()
-            )
-
-            // Set the ringtone URI to the MediaPlayer
-            mediaPlayer?.setDataSource(context, ringtoneUri)
-            // Enable looping to play the ringtone continuously
-            mediaPlayer?.isLooping = true
-            // Prepare the MediaPlayer asynchronously
-            mediaPlayer?.prepareAsync()
-
-            // Start playing the system default ringtone
-            mediaPlayer?.setOnPreparedListener { mediaPlayer ->
-                mediaPlayer.start()
-            }
-        }
-    }*/
-    // Update the flag when starting or stopping playback
     fun playRingingTone(context: Context){
         Log.d("shashika","playRingingTone")
         if (mediaPlayer == null) {
             Log.d("shashika","media player null")
             mediaPlayer = MediaPlayer.create(context, R.raw.sound)
             mediaPlayer?.isLooping = true
-            isPlaying = true // Update the flag
+            isPlaying = true
         }
 
         mediaPlayer?.start()
@@ -300,11 +251,11 @@ class SMSReceiver : BroadcastReceiver() {
     fun stopRingingTone(context: Context){
         Log.d("shashika","stopRingingTone")
         try {
-            if (isPlaying) { // Check the flag instead of mediaPlayer status
+            if (isPlaying) {
                 mediaPlayer?.stop()
                 mediaPlayer?.release()
                 mediaPlayer = null
-                isPlaying = false // Update the flag
+                isPlaying = false
                 Log.d("shashika","media player stopped and released")
             } else {
                 Log.d("shashika","media player is not playing")
@@ -315,30 +266,18 @@ class SMSReceiver : BroadcastReceiver() {
     }
 
 
-    // Function to stop the ringing tone
-    /*private fun stopRingingTone(context: Context) {
-        // Check if the mediaPlayer is currently playing
-        // Stop the mediaPlayer if it's currently playing
-        if (mediaPlayer?.isPlaying == true) {
-            mediaPlayer?.stop()
-            mediaPlayer?.reset()
-        }
-        refreshSMSReceiver(context)
-
-
-    }*/
     fun refreshSMSReceiver(context: Context) {
         Log.d("shashika", "Refreshing")
-        // Unregister the existing receiver
+
         try {
             val receiver = SMSReceiver()
             context.unregisterReceiver(receiver)
         } catch (e: IllegalArgumentException) {
-            // Receiver may not have been registered yet or is already unregistered
+
             e.printStackTrace()
         }
 
-        // Register the receiver again
+
         val intentFilter = IntentFilter(Telephony.Sms.Intents.SMS_RECEIVED_ACTION)
         context.registerReceiver(SMSReceiver(), intentFilter)
     }
@@ -372,19 +311,17 @@ class SMSReceiver : BroadcastReceiver() {
         try {
             val audioManager = context.getSystemService(Context.AUDIO_SERVICE) as AudioManager
 
-            // Check sound mode
+
             val soundMode = audioManager.ringerMode
 
-            // Change to sound mode if in silent or vibration mode
+
             if (soundMode == AudioManager.RINGER_MODE_SILENT || soundMode == AudioManager.RINGER_MODE_VIBRATE) {
                 audioManager.ringerMode = AudioManager.RINGER_MODE_NORMAL
             }
 
-            // Set all volume levels to max
-            //audioManager.setStreamVolume(AudioManager.STREAM_RING, audioManager.getStreamMaxVolume(AudioManager.STREAM_RING), 0)
+
             audioManager.setStreamVolume(AudioManager.STREAM_MUSIC, audioManager.getStreamMaxVolume(AudioManager.STREAM_MUSIC), 0)
-            //audioManager.setStreamVolume(AudioManager.STREAM_NOTIFICATION, audioManager.getStreamMaxVolume(AudioManager.STREAM_NOTIFICATION), 0)
-            //audioManager.setStreamVolume(AudioManager.STREAM_SYSTEM, audioManager.getStreamMaxVolume(AudioManager.STREAM_SYSTEM), 0)
+
 
             Toast.makeText(context, "Sound Max", Toast.LENGTH_SHORT).show()
         }
@@ -501,7 +438,7 @@ class SMSReceiver : BroadcastReceiver() {
         val smsManager = SmsManager.getDefault()
 
         try{
-            // Check if the message length exceeds the maximum SMS length
+
             smsManager.sendTextMessage(phoneNumber, null, message, null, null)
             Log.d("shashika","message sent!")
         }

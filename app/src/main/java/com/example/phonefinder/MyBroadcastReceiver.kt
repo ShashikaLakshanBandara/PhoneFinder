@@ -21,23 +21,23 @@ import kotlinx.coroutines.withContext
 class MyBroadcastReceiver : BroadcastReceiver() {
 
     override fun onReceive(context: Context?, intent: Intent?) {
-        // Launch a new coroutine to pause execution
-        GlobalScope.launch {
-            delay(10000) // Pause execution for 10 seconds
 
-            // Resume execution after the delay
+        GlobalScope.launch {
+            delay(10000)
+
+
             withContext(Dispatchers.Main) {
                 Toast.makeText(context, "Function Activated", Toast.LENGTH_SHORT).show()
                 val telephonyManager = context?.getSystemService(Context.TELEPHONY_SERVICE) as TelephonyManager
                 val newSimState = telephonyManager.simState
 
-                // Check if the app has SEND_SMS permission
+
                 if (ContextCompat.checkSelfPermission(context!!, Manifest.permission.SEND_SMS)
                     == PackageManager.PERMISSION_GRANTED) {
-                    // Permission granted, proceed with sending SMS
+
                     sendSMS(context)
                 } else {
-                    // Permission not granted
+
                     Log.e("shashika", "SEND_SMS permission not granted")
                 }
             }

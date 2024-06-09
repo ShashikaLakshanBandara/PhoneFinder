@@ -2,13 +2,13 @@ package com.example.phonefinder
 
 import android.content.Intent
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.room.Room
 import kotlinx.coroutines.Dispatchers
@@ -54,8 +54,7 @@ class Profile : Fragment() {
         val emailAddress = view.findViewById<TextView>(R.id.tvEmailAddress)
         val profilePicture = view.findViewById<ImageView>(R.id.circleImageView2)
 
-        //loading from db
-        //loading from database
+
         val db = Room.databaseBuilder(
             requireContext().applicationContext,
             SettingsDatabase::class.java,"settings"
